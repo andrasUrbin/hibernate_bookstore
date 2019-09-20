@@ -1,6 +1,10 @@
 package com.bookstore.controller.admin;
 
+import com.bookstore.entity.Users;
+import com.bookstore.service.UserServices;
+
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +22,10 @@ public class ListUsersServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	UserServices userServices = new UserServices();
+    	List<Users> listOfUsers = userServices.listUser();
+    	request.setAttribute("listUsers", listOfUsers);
+
 		String listPage = "user_list.jsp";
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher(listPage);
 
