@@ -11,7 +11,7 @@
 		<a href="">Create New User</a>
 	</div>
 	<div align="center">
-		<table border="1">
+		<table border="1" cellpadding="5">
 			<tr>
 				<th>Index</th>
 				<th>ID</th>
