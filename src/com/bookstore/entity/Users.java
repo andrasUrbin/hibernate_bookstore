@@ -12,7 +12,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "users", catalog = "bookstoredb")
 @NamedQueries({
 	@NamedQuery(name = "Users.findAll", query = "SELECT u FROM Users u ORDER BY u.fullName"),
-		@NamedQuery(name = "Users.countAll", query = "SELECT Count(*) FROM Users u")
+		@NamedQuery(name = "Users.countAll", query = "SELECT Count(*) FROM Users u"),
+		@NamedQuery(name = "Users.findByEmail", query = "SELECT u FROM Users u WHERE u.email = :email")
 })
 public class Users implements java.io.Serializable {
 
@@ -31,7 +32,12 @@ public class Users implements java.io.Serializable {
 		this.fullName = fullName;
 	}
 
-	@Id
+    public Users(int userId, String email, String fullName, String password) {
+		this(email, password, fullName);
+		this.userId = userId;
+    }
+
+    @Id
 	@GeneratedValue(strategy = IDENTITY)
 
 	@Column(name = "user_id", unique = true, nullable = false)
