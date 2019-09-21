@@ -8,8 +8,13 @@
 	<jsp:directive.include file="header.jsp"/>
 	<div align="center">
 		<h2>User management</h2>
-		<a href="">Create New User</a>
+		<a href="user_form.jsp">Create New User</a>
 	</div>
+
+	<div align="center">
+		<h4>${message}</h4>		
+	</div>
+
 	<div align="center">
 		<table border="1" cellpadding="5">
 			<tr>
