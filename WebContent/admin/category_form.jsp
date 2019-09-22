@@ -3,6 +3,8 @@
 <html>
 <head>
 	<title>Manage Categories - Bookstore Admin Page</title>
+	<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
@@ -18,11 +20,11 @@
 	</div>
 	<div align="center">
 		<c:if test="${category != null}">
-	        <form action="update_category" method="post" onsubmit="return validateFormInput()">
+	        <form action="update_category" method="post" id="categoryForm">
 	        <input type="hidden" name="categoryId" value="${category.categoryId}">
 	    </c:if>
 	    <c:if test="${category == null}">
-            <form action="create_category" method="post" onsubmit="return validateFormInput()">
+            <form action="create_category" method="post" id="categoryForm">
         </c:if>
         	<table>
         		<tr>
@@ -33,7 +35,7 @@
         		<tr>
         			<td colspan="2" align="center">
         				<input type="submit" value="Save">
-        				<input type="button" value="Cancel" onclick="javascript:history.go(-1);">
+        				<input type="button" value="Cancel" id="buttonCancel">
         			</td>
         		</tr>
         	</table>
@@ -42,15 +44,20 @@
 	<jsp:directive.include file="footer.jsp"/>
 </body>
 <script type="text/javascript">
-	function validateFormInput(){
-		var categoryNameField = document.getElementById("name");
+	$(document).ready(function(){
+		$("#categoryForm").validate({
+			rules: {
+				name: "required",
+			},
 
-		if(categoryNameField.value.length == 0){
-			alert("Category name is required!");
-			categoryNameField.focus();
-			return false;
-		}
-		return true;
-	}
+			messages: {
+				name: "Please enter a valid category name!",
+			}
+		});
+
+		$("#buttonCancel").click(function(){
+			history.go(-1);
+		});
+	});
 </script>
 </html>

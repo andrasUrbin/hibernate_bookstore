@@ -3,6 +3,8 @@
 <html>
 <head>
 	<title>Manage Categories - Bookstore Admin Page</title>
+	<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="../js/jquery.validate.min.js"></script>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
@@ -30,7 +32,7 @@
 				<td>${category.name}</td>
 				<td>
 					<a href="edit_category?id=${category.categoryId}">Edit</a>
-					<a href="javascript:confirmDelete(${category.categoryId})">Delete</a>
+					<a href="javascript:void(0);" class="deleteLink" id="${category.categoryId}">Delete</a>
 				</td>
 			</tr>
 			</c:forEach>
@@ -38,11 +40,16 @@
 	</div>
 	<jsp:directive.include file="footer.jsp"/>
 	<script type="text/javascript">
-		function confirmDelete(categoryId){
-			if(confirm("Are you sure you want to delete the category with the ID of " + categoryId + "?")){
-				window.location = "delete_category?id=" + categoryId;
-			}
-		}
+		$(document).ready(function(){
+			$(".deleteLink").each(function(){
+				$(this).on("click", function(){
+					categoryId = $(this).attr("id");
+					if(confirm("Are you sure you want to delete the category with the ID of " + categoryId + "?")){
+					window.location = "delete_category?id=" + categoryId;
+					}
+				});
+			});
+		});
 	</script>
 </body>
 </html>
