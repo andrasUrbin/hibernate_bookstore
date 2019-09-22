@@ -12,17 +12,13 @@ import com.bookstore.entity.Users;
 
 import java.util.List;
 
-public class UserDAOTest {
+public class UserDAOTest extends BaseDAOTest {
 
-	private static EntityManagerFactory entityManagerFactory;
-	private static EntityManager entityManager;
 	private static UserDAO userDAO;
 
 	@BeforeClass
-	public static void setUpClass(){
-		entityManagerFactory = Persistence.createEntityManagerFactory("BookStoreWebsite");
-		entityManager = entityManagerFactory.createEntityManager();
-		
+	public static void setUpClass() throws Exception {
+		BaseDAOTest.setUpBeforeClass();
 		userDAO = new UserDAO(entityManager);
 	}
 
@@ -88,8 +84,7 @@ public class UserDAOTest {
 	}
 
 	@AfterClass
-	public static void tearDownClass() {
-		entityManager.close();
-		entityManagerFactory.close();
+	public static void tearDownClass() throws Exception {
+		BaseDAOTest.tearDownAfterClass();
 	}
 }
