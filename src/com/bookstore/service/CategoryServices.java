@@ -1,5 +1,6 @@
 package com.bookstore.service;
 
+import com.bookstore.dao.BookDAO;
 import com.bookstore.dao.CategoryDAO;
 import com.bookstore.entity.Category;
 
@@ -100,6 +101,23 @@ public class CategoryServices {
             categoryDAO.update(categoryById);
 
             String message = "Category has been updated successfully!";
+            listCategories(message);
+        }
+    }
+
+    public void deleteCategory() throws ServletException, IOException {
+        int categoryId = Integer.parseInt(request.getParameter("id"));
+        String message = "";
+
+        Category category = categoryDAO.get(categoryId);
+
+        if (category == null) {
+            message = "Could not find category with ID " + categoryId
+                    + ", or it might have been deleted";
+            request.setAttribute("message", message);
+            request.getRequestDispatcher("message.jsp").forward(request, response);
+        }else {
+            categoryDAO.delete(categoryId);
             listCategories(message);
         }
     }
