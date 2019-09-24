@@ -25,4 +25,8 @@ public class AdminHomeServlet extends HttpServlet {
 		dispatcher.forward(request, response);
 	}
 
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+    	doGet(req, resp);
+	}
+
 }

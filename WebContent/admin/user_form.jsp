@@ -54,22 +54,36 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("#userForm").validate({
-			rules: {
-				email: "required",
-				fullname: "required",
-				password: "required",
-			},
+            rules: {
+                email: {
+                    required: true,
+                    email: true
+                },
 
-			messages: {
-				email: "Please enter your email address!",
-				fullname: "Please enter your full name!",
-				password: "Please enter your password!"
-			}
-		});
+                fullname: "required",
 
-		$("#buttonCancel").click(function(){
-			history.go(-1);
-		});
+                <c:if test="${user == null}">
+                password: "required"
+                </c:if>
+            },
+
+            messages: {
+                email: {
+                    required: "Please enter email",
+                    email: "Please enter an valid email address"
+                },
+
+                fullname: "Please enter full name",
+
+                <c:if test="${user == null}">
+                password: "Please enter password"
+                </c:if>
+            }
+        });
+
+        $("#buttonCancel").click(function() {
+            history.go(-1);
+        });
 	});
 </script>
 </html>

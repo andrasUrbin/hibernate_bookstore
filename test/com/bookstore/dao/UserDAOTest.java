@@ -83,6 +83,26 @@ public class UserDAOTest extends BaseDAOTest {
 		assertNotNull(user);
 	}
 
+	@Test
+	public void checkLoginSuccess(){
+		String email = "new";
+		String password = "new";
+
+		boolean loginResult = userDAO.checkLogin(email, password);
+
+		assertTrue(loginResult);
+	}
+
+	@Test
+	public void checkLoginFail(){
+		String email = "new";
+		String password = "new1";
+
+		boolean loginResult = userDAO.checkLogin(email, password);
+
+		assertFalse(loginResult);
+	}
+
 	@AfterClass
 	public static void tearDownClass() throws Exception {
 		BaseDAOTest.tearDownAfterClass();

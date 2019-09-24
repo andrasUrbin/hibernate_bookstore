@@ -1,10 +1,10 @@
 package com.bookstore.service;
 
+import com.bookstore.dao.HashGenerator;
 import com.bookstore.dao.UserDAO;
 import com.bookstore.entity.Users;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -59,9 +59,6 @@ public class UserServices {
 			userDAO.create(newUser);
 			listUser("New user created successfully!");
 		}
-
-		Users newUser = new Users(email, fullName, password);
-		userDAO.create(newUser);
 	}
 
 	public void editUser() throws ServletException, IOException {
@@ -75,6 +72,7 @@ public class UserServices {
 			String errorMessage = "Could not find user with ID " + userId;
 			request.setAttribute("message", errorMessage);
 		} else {
+			user.setPassword(null);
 			request.setAttribute("user", user);
 		}
 
@@ -92,17 +90,25 @@ public class UserServices {
 
 		Users userByEmail = userDAO.findByEmail(email);
 
-		if(userByEmail != null && userByEmail.getUserId() != userById.getUserId()){
-			String message = "Could not update user! User with email: " + email + " already exists!";
+		if (userByEmail != null && userByEmail.getUserId() != userById.getUserId()) {
+			String message = "Could not update user. User with email " + email + " already exists.";
 			request.setAttribute("message", message);
 
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("message.jsp");
 			requestDispatcher.forward(request, response);
-		}else{
-			Users updatedUser = new Users(userId, email, fullName, password);
-			userDAO.update(updatedUser);
 
-			String message = "User has been updated successfully!";
+		} else {
+			userById.setEmail(email);
+			userById.setFullName(fullName);
+
+			if (password != null & !password.isEmpty()) {
+				String encryptedPassword = HashGenerator.generateMD5(password);
+				userById.setPassword(encryptedPassword);
+			}
+
+			userDAO.update(userById);
+
+			String message = "User has been updated successfully";
 			listUser(message);
 		}
 	}
@@ -131,4 +137,24 @@ public class UserServices {
             listUser(message);
         }
     }
+
+    public void login() throws ServletException, IOException {
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
+
+		boolean loginResult = userDAO.checkLogin(email, password);
+
+		if(loginResult){
+			request.getSession().setAttribute("useremail", email);
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/");
+			dispatcher.forward(request, response);
+		}else {
+			String message = "Login failed!";
+			request.setAttribute("message", message);
+
+			RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+			dispatcher.forward(request, response);
+		}
+	}
 }
