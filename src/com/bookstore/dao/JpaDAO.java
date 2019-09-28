@@ -22,6 +22,7 @@ public class JpaDAO<E> {
 		entityManager.refresh(entity);
 		entityManager.getTransaction().commit();
 		return entity;
+		
 	}
 	
 	public E update(E entity) {
