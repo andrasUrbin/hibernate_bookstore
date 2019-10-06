@@ -1,20 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Welcome to this Java based Bookstore</title>
+	<title>Books in ${category} - Bookstore Website</title>
 </head>
 <body>
 	<jsp:directive.include file="header.jsp"/>
+
 	<div align="center">
-		<br><br>
-		<h2>New Books:</h2>
-		<div align="center" style="width: 80%; margin: 0 auto;">
-		<c:forEach items="${listNewBooks}" var="book">
+		<h2>${category.name}</h2>
+	</div>
+
+	<div align="center" style="width: 80%; margin: 0 auto;">
+		<c:forEach items="${listBooks}" var="book">
 			<div style="display: inline-block; margin: 20px;">
 				<div>
 					<a href="view_book?id=${book.bookId}">
@@ -33,7 +31,7 @@
 		</c:forEach>
 		
 	</div>
-	</div>
+
 	<jsp:directive.include file="footer.jsp"/>
 </body>
 </html>

@@ -19,7 +19,7 @@ public class UserDAOTest extends BaseDAOTest {
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		BaseDAOTest.setUpBeforeClass();
-		userDAO = new UserDAO(entityManager);
+		userDAO = new UserDAO();
 	}
 
 	@Test

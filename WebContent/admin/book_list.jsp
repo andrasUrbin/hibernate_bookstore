@@ -55,7 +55,7 @@
 			$(".deleteLink").each(function(){
 				$(this).on("click", function(){
 					bookId = $(this).attr("id");
-					if(confirm("Are you sure you want to delete the user with the ID of " + bookId + "?")){
+					if(confirm("Are you sure you want to delete the book with the ID of " + bookId + "?")){
 					window.location = "delete_book?id=" + bookId;
 					}
 				});

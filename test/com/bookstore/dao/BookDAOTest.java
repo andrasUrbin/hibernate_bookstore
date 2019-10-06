@@ -23,7 +23,7 @@ public class BookDAOTest extends BaseDAOTest{
 	@BeforeAll
 	public static void setUpBeforeClass() throws Exception {
 		BaseDAOTest.setUpBeforeClass();
-		bookDAO = new BookDAO(entityManager);
+		bookDAO = new BookDAO();
 	}
 
 	@Test
@@ -91,6 +91,49 @@ public class BookDAOTest extends BaseDAOTest{
 		long totalNumOfBooks = bookDAO.count();
 		
 		assertEquals(1, totalNumOfBooks);
+	}
+
+	@Test
+	public void testListByCategory(){
+		int categoryId = 13;
+
+		List<Book> listBooks = bookDAO.listByCategory(categoryId);
+
+		assertTrue(listBooks.size() > 0);
+	}
+
+	@Test
+	public void testListByCategoryNotFound(){
+		int categoryId = 200;
+
+		List<Book> listBooks = bookDAO.listByCategory(categoryId);
+
+		assertFalse(listBooks.size() > 0);
+	}
+
+	@Test
+	public void testListByCategoryEquals(){
+		int categoryId = 13;
+
+		List<Book> listBooks = bookDAO.listByCategory(categoryId);
+
+		assertEquals(4, listBooks.size());
+	}
+
+	@Test
+	public void testSearchByTitle(){
+		String keyword = "Java";
+		List<Book> results = bookDAO.search(keyword);
+
+		assertEquals(2, results.size());
+	}
+
+	@Test
+	public void testSearchByAuthor(){
+		String keyword = "Joshua";
+		List<Book> results = bookDAO.search(keyword);
+
+		assertEquals(1, results.size());
 	}
 
 	@AfterAll

@@ -3,11 +3,14 @@
 		<img src="images/bookstorelogo.jpeg">
 	</div>
 	<div align="center">
-		<input type="text" name="keyword" size="50">
-		<input type="button" name="Search">
-		<a href="Login">Sign In</a>
-		<a href="register">Register</a>
-		<a href="view_cart">Cart</a>
+		<form action="search" method="get">
+			<input type="text" name="keyword" size="50">
+			<input type="submit" name="Search">
+		
+			<a href="Login">Sign In</a>
+			<a href="register">Register</a>
+			<a href="view_cart">Cart</a>
+		</form>
 	</div>
 	<div>&nbsp;</div>
 	<div align="center">

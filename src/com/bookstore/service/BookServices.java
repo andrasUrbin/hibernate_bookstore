@@ -5,7 +5,6 @@ import com.bookstore.dao.CategoryDAO;
 import com.bookstore.entity.Book;
 import com.bookstore.entity.Category;
 
-import javax.persistence.EntityManager;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,19 +19,17 @@ import java.util.Date;
 import java.util.List;
 
 public class BookServices {
-    private EntityManager entityManager;
     private BookDAO bookDAO;
     private CategoryDAO categoryDAO;
     private HttpServletRequest request;
     private HttpServletResponse response;
 
-    public BookServices(EntityManager entityManager, HttpServletRequest request, HttpServletResponse response) {
+    public BookServices(HttpServletRequest request, HttpServletResponse response) {
         super();
-        this.entityManager = entityManager;
         this.request = request;
         this.response = response;
-        bookDAO = new BookDAO(entityManager);
-        categoryDAO = new CategoryDAO(entityManager);
+        bookDAO = new BookDAO();
+        categoryDAO = new CategoryDAO();
     }
 
     public void listBooks(String message) throws ServletException, IOException {
@@ -153,11 +150,11 @@ public class BookServices {
         String title = request.getParameter("title");
         Book bookByTitle = bookDAO.findByTitle(title);
 
-        if(!existingBook.equals(bookByTitle)){
+        /*if(!existingBook.equals(bookByTitle)){
             String message = "Could not update the book, because another book has the same title!";
             listBooks(message);
             return;
-        }
+        }*/
 
         readBookFields(existingBook);
         bookDAO.update(existingBook);
@@ -182,5 +179,64 @@ public class BookServices {
             bookDAO.delete(bookId);
             listBooks(message);
         }
+    }
+
+    public void listBooksByCategory() throws ServletException, IOException {
+        int categoryId = Integer.parseInt(request.getParameter("id"));
+        Category category = categoryDAO.get(categoryId);
+
+        if (category == null) {
+            String message = "Sorry, the category ID " + categoryId + " is not available.";
+            request.setAttribute("message", message);
+            request.getRequestDispatcher("frontend/message.jsp").forward(request, response);
+
+            return;
+        }
+
+        List<Book> listBooks = bookDAO.listByCategory(categoryId);
+
+        request.setAttribute("listBooks", listBooks);
+        request.setAttribute("category", category);
+
+        String listPage = "frontend/books_list_by_category.jsp";
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(listPage);
+        requestDispatcher.forward(request, response);
+    }
+
+    public void viewBookDetail() throws ServletException, IOException {
+        Integer bookId = Integer.parseInt(request.getParameter("id"));
+        Book book = bookDAO.get(bookId);
+
+        String destPage = "frontend/book_detail.jsp";
+
+        if (book != null) {
+            request.setAttribute("book", book);
+
+        } else {
+            destPage = "frontend/message.jsp";
+            String message = "Sorry, the book with ID " + bookId + " is not available.";
+            request.setAttribute("message", message);
+        }
+
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(destPage);
+        requestDispatcher.forward(request, response);
+    }
+
+    public void search() throws ServletException, IOException {
+        String keyword = request.getParameter("keyword");
+        List<Book> result = null;
+
+        if(keyword.equals("")){
+            result = bookDAO.listAll();
+        } else {
+            result = bookDAO.search(keyword);
+        }
+
+        request.setAttribute("keyword", keyword);
+        request.setAttribute("result", result);
+
+        String resultPage = "frontend/search_result.jsp";
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher(resultPage);
+        requestDispatcher.forward(request, response);
     }
 }
