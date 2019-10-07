@@ -1,5 +1,6 @@
 package com.bookstore.service;
 
+import com.bookstore.dao.BookDAO;
 import com.bookstore.dao.CategoryDAO;
 import com.bookstore.entity.Category;
 
@@ -102,6 +103,8 @@ public class CategoryServices {
     public void deleteCategory() throws ServletException, IOException {
         int categoryId = Integer.parseInt(request.getParameter("id"));
         String message = "";
+        BookDAO bookDAO = new BookDAO();
+        long numOfBooks = bookDAO.countByCategory(categoryId);
 
         Category category = categoryDAO.get(categoryId);
 
@@ -110,9 +113,13 @@ public class CategoryServices {
                     + ", or it might have been deleted";
             request.setAttribute("message", message);
             request.getRequestDispatcher("message.jsp").forward(request, response);
-        }else {
+        }else if(numOfBooks>0){
+            message = "Could not delete category with Id: %d" + categoryId + ", because it contains some books!";
+            message = String.format(message, numOfBooks);
+        } else {
             categoryDAO.delete(categoryId);
-            listCategories(message);
+            message = "Category has been deleted successfully!";
         }
+        listCategories(message);
     }
 }

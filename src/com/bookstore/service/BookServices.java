@@ -150,11 +150,11 @@ public class BookServices {
         String title = request.getParameter("title");
         Book bookByTitle = bookDAO.findByTitle(title);
 
-        /*if(!existingBook.equals(bookByTitle)){
+        if(!existingBook.equals(bookByTitle) && bookByTitle != null){
             String message = "Could not update the book, because another book has the same title!";
             listBooks(message);
             return;
-        }*/
+        }
 
         readBookFields(existingBook);
         bookDAO.update(existingBook);

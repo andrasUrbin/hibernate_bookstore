@@ -1,9 +1,7 @@
 package com.bookstore.controller.frontend;
 
 import com.bookstore.dao.BookDAO;
-import com.bookstore.dao.CategoryDAO;
 import com.bookstore.entity.Book;
-import com.bookstore.entity.Category;
 
 import java.io.IOException;
 import java.util.List;
