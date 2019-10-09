@@ -141,14 +141,62 @@ public class CustomerServices {
         String zipCode = request.getParameter("zipCode");
         String country = request.getParameter("country");
 
-        customer.setEmail(email);
+        if(email != null && !email.equals("")){
+            customer.setEmail(email);
+        }
         customer.setFullname(fullName);
-        customer.setPassword(password);
+
+        if (password != null && !password.equals("")) {
+            customer.setPassword(password);
+        }
         customer.setPhone(phone);
         customer.setAddress(address);
         customer.setCity(city);
         customer.setZipcode(zipCode);
         customer.setCountry(country);
 
+    }
+
+    public void showLogin() throws ServletException, IOException {
+        String loginPage = "frontend/login.jsp";
+        RequestDispatcher dispatcher = request.getRequestDispatcher(loginPage);
+        dispatcher.forward(request, response);
+    }
+
+    public void doLogin() throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String pass = request.getParameter("password");
+
+        Customer customer = customerDAO.checkLogin(email, pass);
+
+        String message = "";
+        if(customer == null) {
+            message = "Login failed! Check your credentials!";
+            request.setAttribute("message", message);
+            showLogin();
+        }else{
+            request.getSession().setAttribute("loggedCustomer", customer);
+            showCustomerProfile();
+        }
+    }
+
+    public void showCustomerProfile() throws ServletException, IOException {
+        String profilePage = "frontend/customer_profile.jsp";
+        RequestDispatcher dispatcher = request.getRequestDispatcher(profilePage);
+        dispatcher.forward(request, response);
+    }
+
+    public void updateCustomerProfile() throws ServletException, IOException {
+        Customer customer = (Customer) request.getSession().getAttribute("loggedCustomer");
+        updateCustomerFields(customer);
+        customerDAO.update(customer);
+
+        showCustomerProfile();
+    }
+
+    public void showCustomerProfileEditForm() throws ServletException, IOException {
+        String profilePage = "frontend/edit_profile.jsp";
+        RequestDispatcher dispatcher = request.getRequestDispatcher(profilePage);
+        dispatcher.forward(request, response);
     }
 }
